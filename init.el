@@ -1,4 +1,7 @@
 
+;;; init.el --- Initialization file for Emacs
+;;; Commentary: Emacs Startup File --- initialization for Emacs
+
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
@@ -12,19 +15,6 @@
 (package-initialize)
 (elpy-enable)
 
-;; Irony Mode
-
-(require 'flymake-hlint)
-(add-hook 'haskell-mode-hook 'flymake-hlint-load)
-
-(eval-after-load 'flycheck
-      '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup))
-
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'objc-mode-hook 'irony-mode)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
 ;; Custom Themes
 
 (add-to-list 'custom-theme-load-path "~/.emacs.d/moe-dark-theme.el/")
@@ -33,26 +23,40 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/ample-theme.el/")
 (add-to-list 'load-path "~/.emacs.d/ample-theme.el/")
 
-(require 'helm-config)
+;; Org-bullets mode
+
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 ;; Customization
 
 (setq inhibit-splash-screen t)
 (setq make-backup-files nil)
+(setq ring-bell-function 'ignore)
+
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (column-number-mode t)
-(setq ring-bell-function 'ignore)
-
-(eval-after-load 'flycheck
-  '(add-hook 'flycheck-mode-hook #'flycheck-haskell-setup))
 
 ;; Magit key bindings
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-x M-g") 'magit-dispatch)
 
+;; org-mode LaTeX Export
+
+(require 'ox-latex)
+(unless (boundp 'org-latex-classes)
+  (setq org-latex-classes nil))
+(add-to-list 'org-latex-classes
+             '("article"
+               "\\documentclass{article}"
+               ("\\section{%s}" . "\\section*{%s}")))
+
+;; Julia Setup
+
+(add-hook 'after-init-hook #'global-flycheck-mode)
 (flycheck-julia-setup)
 
 ;; Current Font
@@ -91,7 +95,7 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (flymake-python-pyflakes flymake magit tramp ## flycheck-irony flymake-hlint flymake-haskell-multi julia-shell julia-repl julia-mode flycheck-clang-tidy flycheck-haskell flycheck-julia haskell-mode haskell-emacs irony flymake-google-cpplint google-c-style flymake-cppcheck tabbar tab-group elpy helm neotree turnip spacemacs-theme dumb-jump org 2048-game)))
+    (org-bullets flymake-python-pyflakes flymake magit tramp ## flycheck-irony julia-shell julia-repl julia-mode flycheck-clang-tidy flycheck-haskell flycheck-julia haskell-mode haskell-emacs irony flymake-google-cpplint google-c-style flymake-cppcheck tabbar tab-group elpy helm neotree turnip spacemacs-theme dumb-jump org 2048-game)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
@@ -125,4 +129,3 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
