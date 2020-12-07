@@ -59,9 +59,17 @@
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (flycheck-julia-setup)
 
+;; cuda-mode configurations
+
+(define-derived-mode cuda-mode c-mode "CUDA"
+  "CUDA mode."
+  (setq c-basic-offset 4))
+
+(add-to-list 'auto-mode-alist '("\\.cu\\'" . cuda-mode))
+
 ;; Current Font
 
-(set-default-font "-*-Source Code Pro-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1")
+(set-frame-font "-*-Source Code Pro-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1")
 
 ;; Current Theme
 
@@ -95,7 +103,7 @@
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(package-selected-packages
    (quote
-    (org-bullets flymake-python-pyflakes flymake magit tramp ## flycheck-irony julia-shell julia-repl julia-mode flycheck-clang-tidy flycheck-haskell flycheck-julia haskell-mode haskell-emacs irony flymake-google-cpplint google-c-style flymake-cppcheck tabbar tab-group elpy helm neotree turnip spacemacs-theme dumb-jump org 2048-game)))
+    (cuda-mode rust-mode org-bullets flymake-python-pyflakes flymake magit tramp ## flycheck-irony julia-shell julia-repl julia-mode flycheck-clang-tidy flycheck-haskell flycheck-julia haskell-mode haskell-emacs irony flymake-google-cpplint google-c-style flymake-cppcheck tabbar tab-group elpy helm neotree turnip spacemacs-theme dumb-jump org 2048-game)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
